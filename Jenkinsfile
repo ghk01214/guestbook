@@ -9,22 +9,29 @@ pipeline
 			steps
 			{
 				// Get some code from a GitHub repository
-				git (branch: 'master', url:'https://github.com/yu3papa/guestbook.git')
+				git branch: 'master', url:'https://github.com/yu3papa/guestbook.git'
 			}
 		}
 		stage('Build')
 		{
-			agent
-			{
-				docker
-				{
-					image 'maven:3.8.4-openjdk-11-slim'
-				}
-			}
-
 			steps
 			{
-				sh "mvn -Dmaven.test.failure.ignore=true clean package"
+				sh './mvnw clean compile'
+			}
+		}
+		stage('UnitTest')
+		{
+			steps
+			{
+				sh './mvnw test;'
+			}
+
+			post
+			{
+				always
+				{
+					junit '**/target/surefire-reports/TEST-*.xml'
+				}
 			}
 		}
 	}
