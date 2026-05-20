@@ -14,17 +14,17 @@ pipeline
 		}
 		stage('Build')
 		{
-			steps
+			agent
 			{
-				sh "./mvnw -Dmaven.test.failure.ignore=true clean package"
+				docker
+				{
+					image 'maven:3.8.4-openjdk-11-slim'
+				}
 			}
 
-			post
+			steps
 			{
-				success
-				{
-					archiveArtifacts 'target/*.jar'
-				}
+				sh "mvn -Dmaven.test.failure.ignore=true clean package"
 			}
 		}
 	}
