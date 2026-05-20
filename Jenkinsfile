@@ -16,7 +16,7 @@ pipeline
 		{
 			steps
 			{
-				bash "./mvnw -Dmaven.test.failure.ignore=true clean package"
+				sh "./mvnw -Dmaven.test.failure.ignore=true clean package"
 			}
 
 			post
