@@ -1,38 +1,23 @@
-pipeline
-{
-	agent any
+pipeline {
+    agent any
+    stages {
+        stage("Slack Notification") {
+            steps {
+                slackSend(tokenCredentialId: 'slack-token'
+                        , channel: '#교육'
+                        , color: 'good'
+                        , message: '교육 채널 메세지')
 
-	stages
-	{
-		stage('Checkout')
-		{
-			steps
-			{
-				// Get some code from a GitHub repository
-				git branch: 'master', url:'https://github.com/yu3papa/guestbook.git'
-			}
-		}
-		stage('Build')
-		{
-			steps
-			{
-				sh './mvnw clean compile'
-			}
-		}
-		stage('UnitTest')
-		{
-			steps
-			{
-				sh './mvnw test;'
-			}
+                slackSend(tokenCredentialId: 'slack-token'
+                        , channel: '#랜덤'
+                        , color: 'warning'
+                        , message: '랜덤 채널 메세지')
 
-			post
-			{
-				always
-				{
-					junit '**/target/surefire-reports/TEST-*.xml'
-				}
-			}
-		}
-	}
+                slackSend(tokenCredentialId: 'slack-token'
+                        , channel: '#일반'
+                        , color: 'danger'
+                        , message: '일반 채널 메세지')
+            }
+        }
+    }
 }
